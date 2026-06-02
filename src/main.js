@@ -70,9 +70,13 @@ window.addEventListener('mousedown', (e)=>{
   weapon.tryFire(now, raycaster, enemies);
 });
 
-// reload
+// reload + squad commands
 addEventListener('keydown', (e)=>{
   if(e.code==='KeyR') weapon.startReload();
+  if(e.code==='Digit1') squad.setCommand('follow');
+  if(e.code==='Digit2') squad.setCommand('hold');
+  if(e.code==='Digit3') squad.setCommand('flank');
+  if(e.code==='Digit4') squad.setCommand('takecover');
 });
 
 let last = performance.now();
@@ -112,7 +116,7 @@ function animate(){
   // spawn logic
   spawnTimer -= dt; if(spawnTimer<=0){ spawnEnemy(); spawnTimer = 2 + Math.random()*3; }
 
-  hud.innerText = `Enemies: ${enemies.length}  \nAmmo: ${weapon.ammo}/${weapon.reserve}${weapon.reloading? ' (reloading)': ''}`;
+  hud.innerText = `Enemies: ${enemies.length}  \nAmmo: ${weapon.ammo}/${weapon.reserve}${weapon.reloading? ' (reloading)': ''}  \nSquad: ${squad.command}`;
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);

@@ -7,6 +7,7 @@ Controls
 - Click to lock pointer and play
 - WASD to move, mouse to look
 - Left mouse to shoot, `R` to reload
+ - `1` Follow, `2` Hold position, `3` Flank, `4` Take cover
 
 Run locally (recommended - uses Vite dev server):
 

@@ -2,6 +2,12 @@
 
 Minimal browser-based first-person prototype using Three.js. Player leads a small squad to eliminate enemies.
 
+
+Controls
+- Click to lock pointer and play
+- WASD to move, mouse to look
+- Left mouse to shoot, `R` to reload
+
 Run locally (recommended - uses Vite dev server):
 
 ```bash

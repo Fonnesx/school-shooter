@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { Squad } from './ai.js';
+import { Weapon } from './weapon.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x88aaff);
@@ -58,17 +59,20 @@ const squad = new Squad(scene, 2, [ -1,0,3 ]);
 // simple HUD
 const hud = document.createElement('div'); hud.id='hud'; hud.innerText='Enemies: 0'; document.body.appendChild(hud);
 
+// weapon
+const weapon = new Weapon(camera);
+
 // shooting
 const raycaster = new THREE.Raycaster();
 window.addEventListener('mousedown', (e)=>{
   if(e.button!==0) return;
-  const origin = camera.position.clone();
-  raycaster.setFromCamera(new THREE.Vector2(0,0), camera);
-  const hits = raycaster.intersectObjects(enemies.map(en=>en.mesh));
-  if(hits.length){
-    const m = hits[0].object; const en = enemies.find(x=>x.mesh===m);
-    if(en){ en.health -= 50; }
-  }
+  const now = performance.now()/1000;
+  weapon.tryFire(now, raycaster, enemies);
+});
+
+// reload
+addEventListener('keydown', (e)=>{
+  if(e.code==='KeyR') weapon.startReload();
 });
 
 let last = performance.now();
@@ -98,10 +102,17 @@ function animate(){
   // squad update
   squad.update(dt, camera.position, enemies, scene);
 
+  // weapon update (reload and recoil)
+  weapon.update(dt);
+  // apply camera recoil as a small upward pitch
+  if(weapon.recoil>0){ camera.rotation.x = Math.max(-0.6, camera.rotation.x - weapon.recoil); }
+  // relax camera back toward 0 gradually
+  camera.rotation.x += Math.sign(-camera.rotation.x) * Math.min(Math.abs(camera.rotation.x), dt*1.8);
+
   // spawn logic
   spawnTimer -= dt; if(spawnTimer<=0){ spawnEnemy(); spawnTimer = 2 + Math.random()*3; }
 
-  hud.innerText = `Enemies: ${enemies.length}`;
+  hud.innerText = `Enemies: ${enemies.length}  \nAmmo: ${weapon.ammo}/${weapon.reserve}${weapon.reloading? ' (reloading)': ''}`;
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);

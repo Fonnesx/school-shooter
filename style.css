@@ -1,0 +1,4 @@
+html,body{height:100%;margin:0;background:#20232a;color:#fff;font-family:Arial,Helvetica,sans-serif}
+#overlay{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:rgba(0,0,0,0.6);padding:8px 12px;border-radius:6px}
+canvas{display:block}
+#hud{position:fixed;right:12px;top:12px;background:rgba(0,0,0,0.5);padding:8px;border-radius:6px}

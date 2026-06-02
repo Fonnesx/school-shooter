@@ -2,7 +2,15 @@
 
 Minimal browser-based first-person prototype using Three.js. Player leads a small squad to eliminate enemies.
 
-Run locally:
+Run locally (recommended - uses Vite dev server):
+
+```bash
+npm install
+npm run dev
+# then open the URL printed by Vite (usually http://localhost:5173)
+```
+
+Or quickly serve static files (no bundling):
 
 ```bash
 python3 -m http.server 8000
